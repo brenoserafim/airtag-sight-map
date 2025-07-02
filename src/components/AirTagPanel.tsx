@@ -4,7 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { AirTagDevice, AirTagLocation } from '@/types/airtag';
-import { MapPin, Clock, Battery } from 'lucide-react';
+import { MapPin, Clock, Battery, Smartphone, Cpu, Target } from 'lucide-react';
 
 interface AirTagPanelProps {
   devices: AirTagDevice[];
@@ -39,6 +39,18 @@ const AirTagPanel: React.FC<AirTagPanelProps> = ({
     return 'text-destructive';
   };
 
+  const getTypeIcon = (type: 'official' | 'generic') => {
+    return type === 'official' ? 
+      <Smartphone className="h-3 w-3" /> : 
+      <Cpu className="h-3 w-3" />;
+  };
+
+  const getTypeColor = (type: 'official' | 'generic') => {
+    return type === 'official' ? 
+      'border-airtag-primary text-airtag-primary' : 
+      'border-airtag-accent text-airtag-accent';
+  };
+
   return (
     <div className="h-full flex flex-col bg-panel-bg border-r border-panel-border">
       <div className="p-4 border-b border-panel-border">
@@ -61,7 +73,15 @@ const AirTagPanel: React.FC<AirTagPanelProps> = ({
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-base">{device.name}</CardTitle>
-                    <p className="text-sm text-muted-foreground">{device.apple_id}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Badge variant="outline" className={`text-xs ${getTypeColor(device.type)}`}>
+                        {getTypeIcon(device.type)}
+                        <span className="ml-1 capitalize">{device.type === 'official' ? 'Oficial' : 'Genérico'}</span>
+                      </Badge>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      {device.apple_id === 'generic-device' ? 'Dispositivo Genérico' : device.apple_id}
+                    </p>
                   </div>
                   {device.battery_level && (
                     <div className={`flex items-center gap-1 ${getBatteryColor(device.battery_level)}`}>
@@ -112,16 +132,41 @@ const AirTagPanel: React.FC<AirTagPanelProps> = ({
             <h3 className="text-sm font-semibold mb-3">Localização Selecionada</h3>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">AirTag:</span>
+                <span className="text-muted-foreground">Rastreador:</span>
                 <span>{selectedLocation.name || selectedLocation.airtag_id}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-muted-foreground">Tipo:</span>
+                <Badge variant="outline" className={`text-xs ${getTypeColor(selectedLocation.type)}`}>
+                  {getTypeIcon(selectedLocation.type)}
+                  <span className="ml-1 capitalize">{selectedLocation.type === 'official' ? 'Oficial' : 'Genérico'}</span>
+                </Badge>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-muted-foreground">Apple ID:</span>
-                <span className="truncate ml-2">{selectedLocation.apple_id}</span>
+                <span className="truncate ml-2">
+                  {selectedLocation.apple_id === 'generic-device' ? 'Dispositivo Genérico' : selectedLocation.apple_id}
+                </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Coordenadas:</span>
                 <span>{selectedLocation.latitude.toFixed(6)}, {selectedLocation.longitude.toFixed(6)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Precisão:</span>
+                <div className="flex items-center gap-1">
+                  <Target className="h-3 w-3" />
+                  <span>±{selectedLocation.accuracy || 0}m</span>
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-muted-foreground">Bateria:</span>
+                <div className="flex items-center gap-1">
+                  <Battery className={`h-3 w-3 ${getBatteryColor(selectedLocation.battery_level)}`} />
+                  <span className={getBatteryColor(selectedLocation.battery_level)}>
+                    {selectedLocation.battery_level || 0}%
+                  </span>
+                </div>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Timestamp:</span>

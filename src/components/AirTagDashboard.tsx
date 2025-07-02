@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { AirTagDevice, AirTagLocation } from '@/types/airtag';
 import AirTagPanel from './AirTagPanel';
 import MapContainer from './MapContainer';
-import { Smartphone, MapPin, Clock, RefreshCw, Users, Settings } from 'lucide-react';
+import TrackerOverview from './TrackerOverview';
+import { Smartphone, MapPin, Clock, RefreshCw, Users, Settings, Cpu } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Link } from 'react-router-dom';
 
@@ -21,8 +22,10 @@ const AirTagDashboard: React.FC = () => {
       id: '1',
       name: 'Chaves do Carro',
       apple_id: 'user@example.com',
+      type: 'official',
       last_seen: new Date(Date.now() - 1000 * 60 * 15).toISOString(), // 15 min ago
       battery_level: 85,
+      accuracy: 5,
       locations: [
         {
           id: '1',
@@ -32,7 +35,9 @@ const AirTagDashboard: React.FC = () => {
           longitude: -122.4194,
           timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
           name: 'Chaves do Carro',
-          battery_level: 85
+          battery_level: 85,
+          accuracy: 5,
+          type: 'official'
         }
       ]
     },
@@ -40,8 +45,10 @@ const AirTagDashboard: React.FC = () => {
       id: '2',
       name: 'Mochila',
       apple_id: 'user@example.com',
+      type: 'official',
       last_seen: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2h ago
       battery_level: 45,
+      accuracy: 10,
       locations: [
         {
           id: '2',
@@ -51,26 +58,55 @@ const AirTagDashboard: React.FC = () => {
           longitude: -122.4094,
           timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
           name: 'Mochila',
-          battery_level: 45
+          battery_level: 45,
+          accuracy: 10,
+          type: 'official'
         }
       ]
     },
     {
       id: '3',
-      name: 'Carteira',
-      apple_id: 'other@example.com',
+      name: 'Rastreador Genérico',
+      apple_id: 'generic-device',
+      type: 'generic',
       last_seen: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
       battery_level: 72,
+      accuracy: 15,
       locations: [
         {
           id: '3',
-          airtag_id: 'AT003',
-          apple_id: 'other@example.com',
+          airtag_id: 'GEN001',
+          apple_id: 'generic-device',
           latitude: 37.7649,
           longitude: -122.4294,
           timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          name: 'Carteira',
-          battery_level: 72
+          name: 'Rastreador Genérico',
+          battery_level: 72,
+          accuracy: 15,
+          type: 'generic'
+        }
+      ]
+    },
+    {
+      id: '4',
+      name: 'Pet Tracker',
+      apple_id: 'generic-device',
+      type: 'generic',
+      last_seen: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45 min ago
+      battery_level: 28,
+      accuracy: 20,
+      locations: [
+        {
+          id: '4',
+          airtag_id: 'GEN002',
+          apple_id: 'generic-device',
+          latitude: 37.7549,
+          longitude: -122.4394,
+          timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+          name: 'Pet Tracker',
+          battery_level: 28,
+          accuracy: 20,
+          type: 'generic'
         }
       ]
     }
@@ -85,6 +121,8 @@ const AirTagDashboard: React.FC = () => {
   const uniqueAppleIds = [...new Set(devices.map(device => device.apple_id))];
   const totalLocations = allLocations.length;
   const averageBattery = devices.reduce((acc, device) => acc + (device.battery_level || 0), 0) / devices.length;
+  const officialCount = devices.filter(d => d.type === 'official').length;
+  const genericCount = devices.filter(d => d.type === 'generic').length;
 
   const handleRefresh = async () => {
     setIsLoading(true);

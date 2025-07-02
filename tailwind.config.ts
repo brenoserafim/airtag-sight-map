@@ -52,6 +52,13 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Custom AirTag theme colors
+				'map-bg': 'hsl(var(--map-bg))',
+				'airtag-primary': 'hsl(var(--airtag-primary))',
+				'airtag-secondary': 'hsl(var(--airtag-secondary))',
+				'airtag-accent': 'hsl(var(--airtag-accent))',
+				'panel-bg': 'hsl(var(--panel-bg))',
+				'panel-border': 'hsl(var(--panel-border))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

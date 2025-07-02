@@ -18,6 +18,7 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        airtag: "bg-gradient-to-r from-airtag-primary to-airtag-secondary text-white hover:opacity-90 shadow-lg hover:shadow-airtag-primary/25",
       },
       size: {
         default: "h-10 px-4 py-2",

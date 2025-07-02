@@ -71,3 +71,42 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## Como executar o projeto localmente
+
+1. Instale as dependências do Node:
+
+```sh
+npm install
+```
+
+2. Inicie o servidor de desenvolvimento:
+
+```sh
+npm run dev
+```
+
+Abra `http://localhost:8080` no navegador (ou a porta exibida no console) para visualizar a aplicação.
+
+### Token do Mapbox
+
+Ao abrir o dashboard pela primeira vez será solicitado um **Mapbox Access Token**. Para obter o token:
+
+1. Crie uma conta gratuita em [mapbox.com](https://mapbox.com).
+2. Copie o token público e cole no campo exibido na aplicação.
+
+O mapa será inicializado após a configuração do token.
+
+### Dados de exemplo e backend
+
+Atualmente os dados exibidos são gerados pelo arquivo `src/services/mockData.ts`. Visite a página **API Setup** dentro da aplicação para ver instruções de integração com um backend real.
+
+## Compilação para produção
+
+Para gerar arquivos estáticos otimizados, execute:
+
+```sh
+npm run build
+```
+
+Os arquivos prontos ficarão na pasta `dist/`. Você pode pré-visualizar o resultado rodando `npm run preview`.
